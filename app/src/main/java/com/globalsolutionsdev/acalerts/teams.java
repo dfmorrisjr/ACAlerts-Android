@@ -60,6 +60,11 @@ public class teams extends Activity {
             }
         });
 
+        //String _username = AppController._username;
+        //String _password = AppController._password;
+
+
+
     }
 
     private void makeJsonObjectRequest(){
@@ -205,7 +210,7 @@ public class teams extends Activity {
                 hidepDialog();
             }
 
-        },"dfmorrisjr@gmail.com", "donttell");
+        },AppController._username, AppController._password);
 
         AppController.getInstance().addToRequestQueue(req);
 

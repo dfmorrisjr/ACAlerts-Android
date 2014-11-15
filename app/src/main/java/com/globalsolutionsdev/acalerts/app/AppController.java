@@ -19,6 +19,9 @@ import java.lang.Override;
 
 public class AppController extends Application {
     public static final String TAG = AppController.class.getSimpleName();
+    public static String _username = "";
+    public static String _password = "";
+
 
     private RequestQueue mRequestQueue;
 
