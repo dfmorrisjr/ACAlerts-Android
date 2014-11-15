@@ -39,7 +39,7 @@ public class ACAlertsRequest extends JsonArrayRequest {
     public Map<String, String> getHeaders() throws AuthFailureError {
         Map<String, String> headers = new HashMap<String, String>();
         //String auth = "Bearer " + TwitterValues.ACCESS_TOKEN;
-        //String creds = String.format("%s:%s","dfmorrisjr@gmail.com","donttell");
+        //String creds = String.format("%s:%s","[you pick]","[sorry]");
         String creds = String.format("%s:%s",_username,_password);
         String auth = "Basic " + Base64.encodeToString(creds.getBytes(), Base64.NO_WRAP);
         headers.put("Authorization", auth);
