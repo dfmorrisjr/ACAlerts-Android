@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/ACAlerts.iml" filepath="$PROJECT_DIR$/ACAlerts.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ACAlerts-Android.iml" filepath="$PROJECT_DIR$/ACAlerts-Android.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
