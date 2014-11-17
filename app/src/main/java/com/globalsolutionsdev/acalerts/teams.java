@@ -27,8 +27,8 @@ import com.globalsolutionsdev.acalerts.app.AppController;
 public class teams extends Activity {
 
     // json object response url
-    private String urlGetTeams = "http://54.84.48.247/acalerts/public/index.php/api/v1/team";
-    private String urlGetTeamsa = "http://54.84.48.247/acalerts/public/index.php/api/v1.1/teama";
+    private String urlGetTeamsx = "http://54.84.48.247/acalerts/public/index.php/api/v1/team";
+    private String urlGetTeams = "http://54.84.48.247/acalerts/public/index.php/api/v1.0/team";
     private String urlJsonObj = "http://api.androidhive.info/volley/person_object.json";
 
     private static String TAG = teams.class.getSimpleName();
@@ -168,7 +168,7 @@ public class teams extends Activity {
         });
         */
 
-        JsonArrayRequest req = new ACAlertsRequest(urlGetTeamsa, new Response.Listener<JSONArray>() {
+        JsonArrayRequest req = new ACAlertsRequest(urlGetTeams, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 Log.d(TAG, response.toString());
