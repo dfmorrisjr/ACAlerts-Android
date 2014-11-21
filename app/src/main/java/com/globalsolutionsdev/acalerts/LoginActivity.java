@@ -213,7 +213,9 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
 
                         }
 
-                        if(jsonResponse == "1") {
+                        String loginvalue = "1";
+
+                        if(jsonResponse.equals(loginvalue)) {
 
                             openTeams();
 
