@@ -17,6 +17,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,10 +27,20 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.globalsolutionsdev.acalerts.app.AppController;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 /**
@@ -37,6 +48,10 @@ import com.globalsolutionsdev.acalerts.app.AppController;
 
  */
 public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
+
+    private String urlLogin = "http://54.84.48.247/acalerts/public/index.php/api/v1.0/login";
+    private static String TAG = teams.class.getSimpleName();
+    private String jsonResponse;
 
     /**
      * A dummy authentication store containing known user names and passwords.
@@ -70,7 +85,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
+                    //attemptLogin();
                     return true;
                 }
                 return false;
@@ -112,6 +127,9 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
 
+        AppController._username = email;
+        AppController._password = password;
+
         boolean cancel = false;
         View focusView = null;
 
@@ -141,16 +159,123 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            showProgress(true);
+
+
+            /* original code is in this block DFM
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
+            */
 
-            Intent intent = new Intent(this, teams.class);
-            startActivity(intent);
+            // Simulate network access.
+            //Thread.sleep(2000);
 
+            login();
 
         }
     }
+
+    private void openTeams(){
+
+        Intent intent = new Intent(this, teams.class);
+        startActivity(intent);
+    }
+
+    private void showLoginError(){
+        showProgress(false);
+        mPasswordView.setError(getString(R.string.error_incorrect_password));
+        mPasswordView.requestFocus();
+    }
+
+    private boolean login() {
+        boolean result = false;
+        try {
+            // Simulate network access.
+            //Thread.sleep(2000);
+
+            showProgress(true);
+
+            jsonResponse = "0";
+
+            JsonArrayRequest req = new ACAlertsRequest(urlLogin, new Response.Listener<JSONArray>() {
+                @Override
+                public void onResponse(JSONArray response) {
+                    showProgress(false);
+                    Log.d(TAG, response.toString());
+                    try {
+                        jsonResponse = "";
+                        for (int i = 0; i < response.length(); i++) {
+                            JSONObject login = (JSONObject) response.get(i);
+
+                            jsonResponse = login.getString("rowcount");
+
+
+
+
+                        }
+
+                        if(jsonResponse == "1") {
+
+                            openTeams();
+
+
+                        }
+                        else{
+                            showLoginError();
+                        }
+
+
+
+                    }
+                    catch (JSONException e) {
+                        showProgress(false);
+                        e.printStackTrace();
+                        Toast.makeText(getApplicationContext(),
+                                "Error:" + e.getMessage(),
+                                Toast.LENGTH_LONG).show();
+
+                    }
+
+                }
+
+            }, new Response.ErrorListener(){
+                @Override
+                public void onErrorResponse(VolleyError error){
+                    showLoginError();
+                    VolleyLog.d(TAG,"Error: " + error.getMessage());
+                    Toast.makeText(getApplicationContext(),error.getMessage(),Toast.LENGTH_SHORT).show();
+
+                }
+
+            },AppController._username, AppController._password);
+
+            AppController.getInstance().addToRequestQueue(req);
+
+        } //catch (InterruptedException e)
+        catch(Exception e) {
+            showLoginError();
+            return false;
+        }
+
+            /*
+            for (String credential : DUMMY_CREDENTIALS) {
+                String[] pieces = credential.split(":");
+                if (pieces[0].equals(mEmail)) {
+                    // Account exists, return true if the password matches.
+                    return pieces[1].equals(mPassword);
+                }
+            }
+            */
+
+        // TODO: register the new account here.
+
+
+
+
+
+        return result;
+
+    }
+
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
         return email.contains("@");
@@ -273,13 +398,58 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
 
+            boolean result = false;
             try {
                 // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
+                //Thread.sleep(2000);
+
+
+                jsonResponse = "0";
+
+                JsonArrayRequest req = new ACAlertsRequest(urlLogin, new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.d(TAG, response.toString());
+                        try {
+                            jsonResponse = "";
+                            for (int i = 0; i < response.length(); i++) {
+                                JSONObject login = (JSONObject) response.get(i);
+
+                                jsonResponse = login.getString("rowcount");
+
+                            }
+
+
+                        }
+                        catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getApplicationContext(),
+                                    "Error:" + e.getMessage(),
+                                    Toast.LENGTH_LONG).show();
+
+                        }
+
+                    }
+
+                }, new Response.ErrorListener(){
+                    @Override
+                    public void onErrorResponse(VolleyError error){
+                        VolleyLog.d(TAG,"Error: " + error.getMessage());
+                        Toast.makeText(getApplicationContext(),error.getMessage(),Toast.LENGTH_SHORT).show();
+
+                    }
+
+                },AppController._username, AppController._password);
+
+                AppController.getInstance().addToRequestQueue(req);
+
+
+            } //catch (InterruptedException e)
+                catch(Exception e) {
                 return false;
             }
 
+            /*
             for (String credential : DUMMY_CREDENTIALS) {
                 String[] pieces = credential.split(":");
                 if (pieces[0].equals(mEmail)) {
@@ -287,9 +457,20 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
                     return pieces[1].equals(mPassword);
                 }
             }
+            */
 
             // TODO: register the new account here.
-            return true;
+
+
+
+            if(jsonResponse == "1") {
+                result = true;
+
+
+            }
+
+            return result;
+
         }
 
         @Override
