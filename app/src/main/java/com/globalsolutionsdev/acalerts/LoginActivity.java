@@ -208,9 +208,6 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
 
                             jsonResponse = login.getString("rowcount");
 
-
-
-
                         }
 
                         String loginvalue = "1";
@@ -219,13 +216,10 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
 
                             openTeams();
 
-
                         }
                         else{
                             showLoginError();
                         }
-
-
 
                     }
                     catch (JSONException e) {

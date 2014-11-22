@@ -43,14 +43,10 @@ public class teams extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teams);
 
-        btnGetTeams = (Button) findViewById(R.id.getTeams);
-        txtResponse = (TextView) findViewById(R.id.txtResponse);
+        /* Original Code that works is here
+            btnGetTeams = (Button) findViewById(R.id.getTeams);
 
-        pDialog = new ProgressDialog(this);
-        pDialog.setMessage("Please wait...");
-        pDialog.setCancelable(false);
-
-        btnGetTeams.setOnClickListener(new View.OnClickListener() {
+            btnGetTeams.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
                 // making json object request
@@ -59,6 +55,17 @@ public class teams extends Activity {
                 makeJsonArrayRequest();
             }
         });
+
+        */
+        txtResponse = (TextView) findViewById(R.id.txtResponse);
+
+        pDialog = new ProgressDialog(this);
+        pDialog.setMessage("Please wait...");
+        pDialog.setCancelable(false);
+
+        makeJsonArrayRequest();
+
+
 
     }
 
@@ -178,11 +185,15 @@ public class teams extends Activity {
                         JSONObject team = (JSONObject) response.get(i);
 
                         String teamname = team.getString("TeamName");
-                        String twilio = team.getString("TwilioPhoneNumber");
 
+
+                        jsonResponse += teamname + "\n\n";
+                        /* Working code in this block.  string dec was grouped together above.
                         jsonResponse += "Team Name: " + teamname + "\n\n";
-                        jsonResponse += "Twilio: " + twilio + "\n\n";
 
+                        String twilio = team.getString("TwilioPhoneNumber");
+                        jsonResponse += "Twilio: " + twilio + "\n\n";
+                        */
                     }
 
                     txtResponse.setText(jsonResponse);
